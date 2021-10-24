@@ -1,6 +1,7 @@
 module com.example.laboration3 {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.swing;
 
     requires org.kordamp.bootstrapfx.core;
 
