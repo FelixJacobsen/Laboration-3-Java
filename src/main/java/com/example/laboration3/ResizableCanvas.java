@@ -1,4 +1,3 @@
-/*
 package com.example.laboration3;
 import javafx.scene.canvas.Canvas;
 public class ResizableCanvas extends Canvas {
@@ -36,4 +35,3 @@ public class ResizableCanvas extends Canvas {
         this.setHeight(height);
     }
 }
-*/

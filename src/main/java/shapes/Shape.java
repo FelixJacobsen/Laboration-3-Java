@@ -1,19 +1,21 @@
-package Shapes;
-
+package shapes;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Shape {
-    Color color;
+public abstract class Shape {
+    private Color color;
     private double x;
     private double y;
-    private double value;
+    private double size;
 
-    public Shape(Color color, double x, double y, double value) {
+    public Shape(Color color, double x, double y, double size) {
         this.color = color;
         this.x = x;
         this.y = y;
-        this.value = value;
+        this.size = size;
     }
+
+    public abstract void draw(GraphicsContext context);
 
     public Color getColor() {
         return color;
@@ -42,18 +44,16 @@ public class Shape {
         return this;
     }
 
-    public double getValue() {
-        return value;
+    public double getSize() {
+        return size;
     }
 
-    public Shape setValue(double value) {
-        this.value = value;
-        return this;
+    public void setSize(double size) {
+        this.size = size;
     }
 
+    public void setBorderColor(Color color) {
+        this.color = color;
 
-
-
-
-
+    }
 }
