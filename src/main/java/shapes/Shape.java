@@ -1,8 +1,10 @@
 package shapes;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public abstract class Shape {
+
     private Color color;
     private double x;
     private double y;
@@ -14,6 +16,8 @@ public abstract class Shape {
         this.y = y;
         this.size = size;
     }
+
+    public abstract boolean isInside(double x, double y);
 
     public abstract void draw(GraphicsContext context);
 
@@ -52,8 +56,5 @@ public abstract class Shape {
         this.size = size;
     }
 
-    public void setBorderColor(Color color) {
-        this.color = color;
 
-    }
 }

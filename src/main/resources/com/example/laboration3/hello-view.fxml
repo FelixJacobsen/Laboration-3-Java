@@ -12,6 +12,7 @@
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.CheckBox?>
 <?import com.example.laboration3.ResizableCanvas?>
+<?import javafx.scene.control.ChoiceBox?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.laboration3.HelloController"
             prefWidth="1920" prefHeight="1920">
            <top>
@@ -21,6 +22,11 @@
                             <MenuItem text="Save" onAction="#onSave"/>
                             <MenuItem text="Exit" onAction="#onExit"/>
                         </Menu>
+                        <Menu text="Modify">
+                                <MenuItem text="Change color"/>
+                                <MenuItem text="Change font"/>
+                                <MenuItem text="Delete"/>
+                        </Menu>
                     </MenuBar>
                     <ToolBar>
                         <HBox  alignment="CENTER_RIGHT" spacing="5">
@@ -28,7 +34,8 @@
                             <Button fx:id="rectangleButton" text="Rectangle" onAction="#rectangleClick"/>
                             <TextField fx:id="shapeSize" text="20"/>
                             <ColorPicker fx:id="colorPicker"/>
-                            <CheckBox fx:id="eraser" text="Eraser"/>
+                            <CheckBox fx:id="eraser" text="Eraser"  />
+                            <ChoiceBox fx:id="choiceBox" />
                         </HBox>
                     </ToolBar>
                 </VBox>

@@ -8,8 +8,13 @@ public class Rectangle extends Shape{
     }
 
     @Override
+    public boolean isInside(double x, double y) {
+    return false;
+    }
+
+    @Override
     public void draw(GraphicsContext context) {
         context.setFill(this.getColor());
-        context.fillRect(getX(),getY(),25,25);
+        context.fillRect(getX(),getY(),getSize(),getSize());
     }
 }
