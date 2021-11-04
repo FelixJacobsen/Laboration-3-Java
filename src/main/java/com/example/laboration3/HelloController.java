@@ -19,11 +19,9 @@ import javax.imageio.ImageIO;
 import java.io.File;
 
 public class HelloController {
-
     Model model;
 
-    @FXML
-    CheckBox modifyBox;
+
     @FXML
     private Canvas canvas;
 
@@ -33,6 +31,8 @@ public class HelloController {
     @FXML
     private TextField shapeSize;
 
+    @FXML
+    private CheckBox eraser;
 
 
 
@@ -40,12 +40,12 @@ public class HelloController {
         this.model = new Model();
         colorPicker.valueProperty().bindBidirectional(model.colorProperty());
         shapeSize.textProperty().bindBidirectional(model.shapeSizeProperty());
+        eraser.selectedProperty().bindBidirectional(model.selectDeleteMode());
 
         canvas.widthProperty().addListener(o -> drawShape());
         canvas.heightProperty().addListener(o -> drawShape());
 
 
-        modifyBox.selectedProperty().bindBidirectional(model.modifyModeProperty());
 
     }
 
@@ -70,6 +70,8 @@ public class HelloController {
             }
         }
 
+
+
         ObservableList<Shape> temp = model.getTemp();
 
         if (model.isCircleClicked()){
@@ -86,7 +88,7 @@ public class HelloController {
 
 
     public void drawShape() {
-      GraphicsContext gc = canvas.getGraphicsContext2D();
+        var gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getHeight(), canvas.getWidth());
         for (var shape : model.shapes) {
             shape.draw(gc);
@@ -95,13 +97,12 @@ public class HelloController {
 
 
     public void onSave() {
-        SVGWriter.saveToFile(model);
         try {
             Image snapshot = canvas.snapshot(null, null);
 
             ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new File("paint.png"));
         } catch (Exception e) {
-            System.out.println("Something went wrong while trying to save to file " + e);
+            System.out.println("Failed to save image: " + e);
         }
     }
 
@@ -118,21 +119,6 @@ public class HelloController {
     public void rectangleClick() {
         model.rectangleClickedProperty().setValue(true);
         model.circleClickedProperty().setValue(false);
-    }
-
-
-    public void deleteShape() {
-        model.deleteSelectedShapes();
-        drawShape();
-    }
-
-    public void modifyColor() {
-        model.changeColor();
-        drawShape();
-    }
-
-    public void modifyFont() {
-        model.modifySize();
     }
 }
 
