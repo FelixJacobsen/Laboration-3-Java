@@ -1,5 +1,4 @@
 package com.example.laboration3;
-
 import shapes.Circle;
 import shapes.Rectangle;
 import shapes.Shape;
@@ -7,39 +6,35 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.List;
-import java.util.Queue;
-
 public class Model {
-    ObservableList<Shape> shapes;
-    ObservableList<Shape> selectedShape;
+
     private final BooleanProperty circleClicked;
     private final BooleanProperty rectangleClicked;
     private final ObjectProperty<Color> color;
-    private final ObjectProperty<Color> borderColor;
     private final StringProperty shapeSize;
     private final BooleanProperty modifyMode;
+
+    ObservableList<Shape> shapes;
+    ObservableList<Shape> selectedShapes;
     Deque<ObservableList<Shape>> undo;
-
-
+    Deque<ObservableList<Shape>> redo;
 
 
     public Model() {
         this.shapes = FXCollections.observableArrayList();
-        this.selectedShape = FXCollections.observableArrayList();
+        this.selectedShapes = FXCollections.observableArrayList();
         this.circleClicked = new SimpleBooleanProperty();
         this.rectangleClicked = new SimpleBooleanProperty();
         this.color = new SimpleObjectProperty<>();
         this.color.set(Color.BLACK);
-        this.borderColor = new SimpleObjectProperty<>();
-        this.borderColor.set(Color.TRANSPARENT);
+        ObjectProperty<Color> borderColor = new SimpleObjectProperty<>();
+        borderColor.set(Color.TRANSPARENT);
         this.shapeSize = new SimpleStringProperty("18");
-
         this.modifyMode = new SimpleBooleanProperty();
         undo = new ArrayDeque<>();
+        redo = new ArrayDeque<>();
     }
 
 
@@ -51,17 +46,11 @@ public class Model {
         return modifyMode;
     }
 
-    public void setModifyMode(boolean modifyMode) {
-        this.modifyMode.set(modifyMode);
-    }
-
     public void deleteSelectedShapes() {
-        for (var shape : selectedShape) {
+        for (var shape : selectedShapes) {
             shapes.remove(shape);
         }
     }
-
-
 
     public ObjectProperty<Color> colorProperty() {
         return color;
@@ -71,11 +60,9 @@ public class Model {
         return circleClicked.get();
     }
 
-
     public BooleanProperty circleClickedProperty() {
         return circleClicked;
     }
-
 
     public boolean isRectangleClicked() {
         return rectangleClicked.get();
@@ -84,7 +71,6 @@ public class Model {
     public BooleanProperty rectangleClickedProperty() {
         return rectangleClicked;
     }
-
 
     public String getShapeSize() {
         return shapeSize.get();
@@ -116,12 +102,28 @@ public class Model {
     }
 
     public void changeColor() {
-        for(var shape : selectedShape)
+        ObservableList<Shape> temp = getTemp();
+        undo.addLast(temp);
+
+        for(var shape : selectedShapes)
             shape.setColor(getColor());
     }
 
     public void modifySize() {
-        for(var shape : selectedShape)
+        ObservableList<Shape> temp = getTemp();
+        undo.addLast(temp);
+
+        for(var shape : selectedShapes)
             shape.setSize(getShapeSizeAsDouble());
     }
+
+    public void updateShapes() {
+        shapes.clear();
+        shapes.addAll(undo.removeLast());
+    }
+
+   public void updateAfterRedo(){
+        shapes.clear();
+        shapes.addAll(redo.removeLast());
+   }
 }

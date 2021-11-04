@@ -28,35 +28,29 @@ public abstract class Shape {
         this.borderColor = Color.TRANSPARENT;
     }
 
-    public abstract boolean isInside(double x, double y);
-
-    public abstract void draw(GraphicsContext context);
 
     public Color getColor() {
         return color;
     }
 
-    public Shape setColor(Color color) {
+    public void setColor(Color color) {
         this.color = color;
-        return this;
     }
 
     public double getX() {
         return x;
     }
 
-    public Shape setX(double x) {
+    public void setX(double x) {
         this.x = x;
-        return this;
     }
 
     public double getY() {
         return y;
     }
 
-    public Shape setY(double y) {
+    public void setY(double y) {
         this.y = y;
-        return this;
     }
 
     public double getSize() {
@@ -67,15 +61,17 @@ public abstract class Shape {
         this.size = size;
     }
 
-
-    public abstract String shapeToSVG();
-
     public Color getBorderColor() {
         return borderColor;
     }
 
-    public Shape setBorderColor(Color borderColor) {
+    public void setBorderColor(Color borderColor) {
         this.borderColor = borderColor;
-        return this;
     }
+
+    public abstract boolean isInside(double x, double y);
+
+    public abstract String shapeToSVG();
+
+    public abstract void draw(GraphicsContext context);
 }

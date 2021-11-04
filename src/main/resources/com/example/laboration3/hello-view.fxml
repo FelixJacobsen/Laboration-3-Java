@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.BorderPane?>
@@ -10,33 +9,37 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ColorPicker?>
-<?import javafx.scene.control.CheckBox?>
 <?import com.example.laboration3.ResizableCanvas?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.CheckBox?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.laboration3.HelloController"
             prefWidth="1920" prefHeight="1920">
            <top>
+               <HBox>
+
+                   <Button text="Delete" onAction="#deleteShape"/>
+                   <Button text="Modify color" onAction="#modifyColor"/>
+                   <Button text="Modify font" onAction="#modifyFont"/>
+               </HBox>
                 <VBox>
-
                     <MenuBar>
-
                         <Menu text="File">
                             <MenuItem text="Save" onAction="#onSave"/>
                             <MenuItem text="Exit" onAction="#onExit"/>
                         </Menu>
-
                         <Menu text="Modify menu">
                             <MenuItem text="Delete" onAction="#deleteShape"/>
                             <MenuItem text="Modify color" onAction="#modifyColor"/>
                             <MenuItem text="Modify font" onAction="#modifyFont"/>
+                            <MenuItem text="Undo" onAction="#undoAction"/>
+                            <MenuItem text="Redo" onAction="#redoAction"/>
                         </Menu>
-
                     </MenuBar>
                     <ToolBar>
                         <HBox  alignment="CENTER_RIGHT" spacing="5">
-                            <Button fx:id="circleButton" text="Circle" onAction="#circleClick"/>
-                            <Button fx:id="rectangleButton" text="Rectangle" onAction="#rectangleClick"/>
+                            <CheckBox text="Modify mode" fx:id="modifyBox"/>
                             <TextField fx:id="shapeSize" text="20"/>
+                            <Button text="Circle" onAction="#circleClick"/>
+                            <Button text="Rectangle" onAction="#rectangleClick"/>
                             <ColorPicker fx:id="colorPicker"/>
                         </HBox>
                     </ToolBar>
@@ -45,12 +48,4 @@
     <center>
         <ResizableCanvas fx:id="canvas" onMouseClicked="#clickedOnCanvas"/>
     </center>
-
-
-    <Label fx:id="welcomeText"/>
-    <left>
-        <VBox spacing="10">
-            <CheckBox text="Modify mode" fx:id="modifyBox"/>
-        </VBox>
-    </left>
 </BorderPane>

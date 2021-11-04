@@ -1,12 +1,11 @@
 package com.example.laboration3;
 
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +20,8 @@ import java.io.File;
 public class HelloController {
     Model model;
 
+    @FXML
+    private CheckBox modifyBox;
 
     @FXML
     private Canvas canvas;
@@ -31,19 +32,18 @@ public class HelloController {
     @FXML
     private TextField shapeSize;
 
-    @FXML
-    private CheckBox eraser;
-
-
 
     public void initialize() {
         this.model = new Model();
         colorPicker.valueProperty().bindBidirectional(model.colorProperty());
         shapeSize.textProperty().bindBidirectional(model.shapeSizeProperty());
-        eraser.selectedProperty().bindBidirectional(model.selectDeleteMode());
+
 
         canvas.widthProperty().addListener(o -> drawShape());
         canvas.heightProperty().addListener(o -> drawShape());
+
+        modifyBox.selectedProperty().bindBidirectional(model.modifyModeProperty());
+        model.shapes.addListener((ListChangeListener<Shape>) change -> drawShape());
 
 
 
@@ -58,31 +58,33 @@ public class HelloController {
         if(model.isModifyMode()){
             for(var shape: model.shapes){
                 if(shape.isInside(x,y)){
-                    if(model.selectedShape.contains(shape)){
-                        shape.setBorderColor(Color.TRANSPARENT);
-                        model.selectedShape.remove(shape);
-                    }else {
-                        shape.setBorderColor(Color.RED);
-                        model.selectedShape.add(shape);
+                    if(model.selectedShapes.contains(shape)){
+                       shape.setBorderColor(Color.TRANSPARENT);
+                       model.selectedShapes.remove(shape);
+                    }else{
+                      shape.setBorderColor(Color.RED);
+                       model.selectedShapes.add(shape);
                     }
                 }
-                drawShape();
+
+            }
+
+        }else{
+
+            ObservableList<Shape> temp = model.getTemp();
+
+            if (model.isCircleClicked()){
+                model.shapes.add(new Circle(model.getColor(), x, y, model.getShapeSizeAsDouble()));
+                model.undo.addLast(temp);
+            }
+
+            if (model.isRectangleClicked()){
+                model.shapes.add(new Rectangle(model.getColor(), x, y, model.getShapeSizeAsDouble()));
+                model.undo.addLast(temp);
             }
         }
 
-
-
-        ObservableList<Shape> temp = model.getTemp();
-
-        if (model.isCircleClicked()){
-            model.shapes.add(new Circle(model.getColor(), x, y, model.getShapeSizeAsDouble()));
-            model.undo.addLast(temp);
-        }
-
-        if (model.isRectangleClicked()){
-            model.shapes.add(new Rectangle(model.getColor(), x, y, model.getShapeSizeAsDouble()));
-            model.undo.addLast(temp);
-        }
+        drawShape();
 
     }
 
@@ -97,6 +99,7 @@ public class HelloController {
 
 
     public void onSave() {
+        SVGWriter.saveToFile(model);
         try {
             Image snapshot = canvas.snapshot(null, null);
 
@@ -105,6 +108,9 @@ public class HelloController {
             System.out.println("Failed to save image: " + e);
         }
     }
+
+
+
 
     public void onExit() {
         Platform.exit();
@@ -120,6 +126,40 @@ public class HelloController {
         model.rectangleClickedProperty().setValue(true);
         model.circleClickedProperty().setValue(false);
     }
+
+    public void deleteShape() {
+        model.deleteSelectedShapes();
+    }
+
+    public void modifyColor() {
+        model.changeColor();
+    }
+
+    public void modifyFont() {
+        model.modifySize();
+    }
+
+
+    public void undoAction() {
+
+
+        ObservableList<Shape> temp = model.getTemp();
+        if(model.undo.isEmpty())
+            return;
+        model.redo.addLast(temp);
+        model.updateShapes();
+    }
+
+    public void redoAction() {
+        ObservableList<Shape> temp = model.getTemp();
+        if(model.redo.isEmpty())
+            return;
+        model.undo.addLast(temp);
+        model.updateAfterRedo();
+    }
+
+
+
 }
 
 

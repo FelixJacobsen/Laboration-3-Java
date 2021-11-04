@@ -17,8 +17,8 @@ public class Circle extends Shape{
     public boolean isInside(double x, double y) {
         double dx = x - getX();
         double dy = y - getY();
-        double distanceFromCircleCenterSquared = dx * dx + dy * dy;
-        return distanceFromCircleCenterSquared < radius*radius;
+        double distanceFromCircleCenterSquared = Math.sqrt((dx * dx) + (dy * dy));
+        return distanceFromCircleCenterSquared <= getSize();
     }
 
     @Override

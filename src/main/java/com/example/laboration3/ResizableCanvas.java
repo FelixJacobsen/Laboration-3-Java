@@ -7,12 +7,10 @@ public class ResizableCanvas extends Canvas {
         return true;
     }
 
-
     @Override
     public double minWidth(double v) {
         return 1;
     }
-
 
     @Override
     public double minHeight(double v) {

@@ -11,36 +11,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SVGWriter {
-    private static FileChooser fileChooser = new FileChooser();
+    private static final FileChooser fileChooser = new FileChooser();
 
-    public static void saveToFile(Model model){
-
-        fileChooser.setTitle("Oowowowow");
+    public static void saveToFile(Model model) {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG format", "*.svg"));
-
         Path path = Path.of(fileChooser.showSaveDialog(new Stage()).getPath());
         List<String> stringList = new ArrayList<>();
 
-        convertToStrings(model,stringList);
+        convertToStrings(model, stringList);
 
         try {
-            Files.write(path,stringList);
+            Files.write(path, stringList);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private static void convertToStrings(Model model, List<String> stringList){
-         stringList.add("<svg xlmns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800.0\" height=\"800.0\"> ");
-         model.shapes.forEach(shape -> shapeSVGtoString(shape,stringList));
-         stringList.add("</svg>");
+    private static void convertToStrings(Model model, List<String> stringList) {
+        stringList.add("<svg xlmns=\"http://www.w3.org/2000/svg\" version=\"1.1\" " +
+                "width=\"800.0\" height=\"800.0\"> ");
+
+        model.shapes.forEach(shape -> shapeSVGtoString(shape, stringList));
+        stringList.add("</svg>");
     }
 
     private static void shapeSVGtoString(Shape shape, List<String> stringList) {
-        stringList.add( shape.shapeToSVG());
-
+        stringList.add(shape.shapeToSVG());
     }
-
-
 }
