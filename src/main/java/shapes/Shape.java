@@ -9,12 +9,23 @@ public abstract class Shape {
     private double x;
     private double y;
     private double size;
+    private Color borderColor;
 
     public Shape(Color color, double x, double y, double size) {
         this.color = color;
         this.x = x;
         this.y = y;
         this.size = size;
+        this.borderColor = Color.TRANSPARENT;
+    }
+
+    //Deep copy
+    public Shape(Shape shape){
+        this.color = shape.color;
+        this.x = shape.getX();
+        this.y = shape.getY();
+        this.size = shape.getSize();
+        this.borderColor = Color.TRANSPARENT;
     }
 
     public abstract boolean isInside(double x, double y);
@@ -57,4 +68,14 @@ public abstract class Shape {
     }
 
 
+    public abstract String shapeToSVG();
+
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    public Shape setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+        return this;
+    }
 }

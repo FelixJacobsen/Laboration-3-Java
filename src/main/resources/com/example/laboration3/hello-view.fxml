@@ -17,16 +17,20 @@
             prefWidth="1920" prefHeight="1920">
            <top>
                 <VBox>
+
                     <MenuBar>
+
                         <Menu text="File">
                             <MenuItem text="Save" onAction="#onSave"/>
                             <MenuItem text="Exit" onAction="#onExit"/>
                         </Menu>
-                        <Menu text="Modify">
-                                <MenuItem text="Change color"/>
-                                <MenuItem text="Change font"/>
-                                <MenuItem text="Delete"/>
+
+                        <Menu text="Modify menu">
+                            <MenuItem text="Delete" onAction="#deleteShape"/>
+                            <MenuItem text="Modify color" onAction="#modifyColor"/>
+                            <MenuItem text="Modify font" onAction="#modifyFont"/>
                         </Menu>
+
                     </MenuBar>
                     <ToolBar>
                         <HBox  alignment="CENTER_RIGHT" spacing="5">
@@ -34,8 +38,6 @@
                             <Button fx:id="rectangleButton" text="Rectangle" onAction="#rectangleClick"/>
                             <TextField fx:id="shapeSize" text="20"/>
                             <ColorPicker fx:id="colorPicker"/>
-                            <CheckBox fx:id="eraser" text="Eraser"  />
-                            <ChoiceBox fx:id="choiceBox" />
                         </HBox>
                     </ToolBar>
                 </VBox>
@@ -43,5 +45,12 @@
     <center>
         <ResizableCanvas fx:id="canvas" onMouseClicked="#clickedOnCanvas"/>
     </center>
+
+
     <Label fx:id="welcomeText"/>
+    <left>
+        <VBox spacing="10">
+            <CheckBox text="Modify mode" fx:id="modifyBox"/>
+        </VBox>
+    </left>
 </BorderPane>

@@ -1,6 +1,7 @@
 package com.example.laboration3;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,9 +19,11 @@ import javax.imageio.ImageIO;
 import java.io.File;
 
 public class HelloController {
+
     Model model;
 
-
+    @FXML
+    CheckBox modifyBox;
     @FXML
     private Canvas canvas;
 
@@ -30,8 +33,6 @@ public class HelloController {
     @FXML
     private TextField shapeSize;
 
-    @FXML
-    private CheckBox eraser;
 
 
 
@@ -39,12 +40,12 @@ public class HelloController {
         this.model = new Model();
         colorPicker.valueProperty().bindBidirectional(model.colorProperty());
         shapeSize.textProperty().bindBidirectional(model.shapeSizeProperty());
-        eraser.selectedProperty().bindBidirectional(model.selectDeleteMode());
 
         canvas.widthProperty().addListener(o -> drawShape());
         canvas.heightProperty().addListener(o -> drawShape());
 
 
+        modifyBox.selectedProperty().bindBidirectional(model.modifyModeProperty());
 
     }
 
@@ -54,36 +55,38 @@ public class HelloController {
         double x = mouseEvent.getX();
         double y = mouseEvent.getY();
 
-        if(eraser.isSelected()){
+        if(model.isModifyMode()){
             for(var shape: model.shapes){
                 if(shape.isInside(x,y)){
                     if(model.selectedShape.contains(shape)){
-                        shape.setColor()
+                        shape.setBorderColor(Color.TRANSPARENT);
                         model.selectedShape.remove(shape);
-
-                    }
-                    else {
+                    }else {
+                        shape.setBorderColor(Color.RED);
                         model.selectedShape.add(shape);
-
                     }
                 }
+                drawShape();
             }
         }
 
+        ObservableList<Shape> temp = model.getTemp();
 
-
-        if (model.isCircleClicked())
+        if (model.isCircleClicked()){
             model.shapes.add(new Circle(model.getColor(), x, y, model.getShapeSizeAsDouble()));
+            model.undo.addLast(temp);
+        }
 
-        if (model.isRectangleClicked())
+        if (model.isRectangleClicked()){
             model.shapes.add(new Rectangle(model.getColor(), x, y, model.getShapeSizeAsDouble()));
+            model.undo.addLast(temp);
+        }
 
-        drawShape();
     }
 
 
     public void drawShape() {
-        var gc = canvas.getGraphicsContext2D();
+      GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getHeight(), canvas.getWidth());
         for (var shape : model.shapes) {
             shape.draw(gc);
@@ -92,12 +95,13 @@ public class HelloController {
 
 
     public void onSave() {
+        SVGWriter.saveToFile(model);
         try {
             Image snapshot = canvas.snapshot(null, null);
 
             ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new File("paint.png"));
         } catch (Exception e) {
-            System.out.println("Failed to save image: " + e);
+            System.out.println("Something went wrong while trying to save to file " + e);
         }
     }
 
@@ -114,6 +118,21 @@ public class HelloController {
     public void rectangleClick() {
         model.rectangleClickedProperty().setValue(true);
         model.circleClickedProperty().setValue(false);
+    }
+
+
+    public void deleteShape() {
+        model.deleteSelectedShapes();
+        drawShape();
+    }
+
+    public void modifyColor() {
+        model.changeColor();
+        drawShape();
+    }
+
+    public void modifyFont() {
+        model.modifySize();
     }
 }
 
