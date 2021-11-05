@@ -1,4 +1,5 @@
 package se.iths.java2.felix.laboration3;
+
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import shapes.FactoryShapes;
 import shapes.Shape;
+
 import javax.imageio.ImageIO;
 import java.io.File;
 
@@ -29,8 +31,12 @@ public class HelloController {
     @FXML
     private TextField shapeSize;
 
-    public HelloController(Model model){
+    public HelloController(Model model) {
         this.model = model;
+    }
+
+    public HelloController(){
+
     }
 
 
@@ -39,51 +45,41 @@ public class HelloController {
         colorPicker.valueProperty().bindBidirectional(model.colorProperty());
         shapeSize.textProperty().bindBidirectional(model.shapeSizeProperty());
 
-
         canvas.widthProperty().addListener(o -> drawShape());
         canvas.heightProperty().addListener(o -> drawShape());
 
         modifyBox.selectedProperty().bindBidirectional(model.modifyModeProperty());
         model.shapes.addListener((ListChangeListener<Shape>) change -> drawShape());
 
-
-
     }
-
-
-
 
 
     public void clickedOnCanvas(MouseEvent mouseEvent) {
         double x = mouseEvent.getX();
         double y = mouseEvent.getY();
-
-        if(model.isModifyMode()){
-            for(var shape: model.shapes){
-                if(shape.isInside(x,y)){
-                    if(model.selectedShapes.contains(shape)){
-                       shape.setBorderColor(Color.TRANSPARENT);
-                       model.selectedShapes.remove(shape);
-                    }else{
-                      shape.setBorderColor(Color.RED);
-                       model.selectedShapes.add(shape);
+        if (model.isModifyMode()) {
+            for (var shape : model.shapes) {
+                if (shape.isInside(x, y)) {
+                    if (model.selectedShapes.contains(shape)) {
+                        shape.setBorderColor(Color.TRANSPARENT);
+                        model.selectedShapes.remove(shape);
+                    } else {
+                        shape.setBorderColor(Color.RED);
+                        model.selectedShapes.add(shape);
                     }
                 }
-
             }
-
-        }else{
-
+        } else {
             ObservableList<Shape> temp = model.getTemp();
 
-            if (model.isCircleClicked()){
-                Shape shape = FactoryShapes.circleOf(model.getColor(),x, y, model.getShapeSizeAsDouble());
+            if (model.isCircleClicked()) {
+                Shape shape = FactoryShapes.circleOf(model.getColor(), x, y, model.getShapeSizeAsDouble());
                 model.undo.addLast(temp);
                 model.shapes.add(shape);
             }
 
-            if (model.isRectangleClicked()){
-                Shape shape = FactoryShapes.rectangleOf(model.getColor(), x , y, model.getShapeSizeAsDouble());
+            if (model.isRectangleClicked()) {
+                Shape shape = FactoryShapes.rectangleOf(model.getColor(), x, y, model.getShapeSizeAsDouble());
                 model.undo.addLast(temp);
                 model.shapes.add(shape);
             }
@@ -115,13 +111,11 @@ public class HelloController {
 
 
     public void circleClick() {
-        model.circleClickedProperty().setValue(true);
-        model.rectangleClickedProperty().setValue(false);
+       model.circleClick();
     }
 
     public void rectangleClick() {
-        model.rectangleClickedProperty().setValue(true);
-        model.circleClickedProperty().setValue(false);
+       model.rectangleClick();
     }
 
     public void deleteShape() {
@@ -136,25 +130,13 @@ public class HelloController {
         model.modifySize();
     }
 
-
     public void undoAction() {
-        ObservableList<Shape> temp = model.getTemp();
-        if(model.undo.isEmpty())
-            return;
-
-        model.redo.addLast(temp);
-        model.updateShapes();
+        model.undoFromModel();
     }
 
     public void redoAction() {
-        ObservableList<Shape> temp = model.getTemp();
-        if(model.redo.isEmpty())
-            return;
-
-        model.undo.addLast(temp);
-        model.updateAfterRedo();
+        model.redoFromModel();
     }
-
 
 
 }

@@ -42,12 +42,18 @@ public class Model {
         this.color.set(Color.BLACK);
         ObjectProperty<Color> borderColor = new SimpleObjectProperty<>();
         borderColor.set(Color.TRANSPARENT);
-        this.shapeSize = new SimpleStringProperty("18");
+        this.shapeSize = new SimpleStringProperty("30");
         this.modifyMode = new SimpleBooleanProperty();
         undo = new ArrayDeque<>();
         redo = new ArrayDeque<>();
     }
+    public void deleteShape(Shape shape){
+        shapes.remove(shape);
+    }
 
+    public void addShape(Shape shape){
+        shapes.add(shape);
+    }
 
     public boolean isModifyMode() {
         return modifyMode.get();
@@ -61,6 +67,14 @@ public class Model {
         for (var shape : selectedShapes) {
             shapes.remove(shape);
         }
+    }
+
+    public Deque<ObservableList<Shape>> getUndo() {
+        return undo;
+    }
+
+    public Deque<ObservableList<Shape>> getRedo() {
+        return redo;
     }
 
     public ObjectProperty<Color> colorProperty() {
@@ -137,4 +151,31 @@ public class Model {
         shapes.clear();
         shapes.addAll(redo.removeLast());
     }
+
+    public void undoFromModel(){
+        if(getUndo().isEmpty())
+            return;
+        ObservableList<Shape> temp = getTemp();
+        redo.addLast(temp);
+        updateShapes();
+    }
+
+    public void redoFromModel() {
+        if(getRedo().isEmpty())
+            return;
+        ObservableList<Shape> tempList = getTemp();
+        undo.addLast(tempList);
+        updateAfterRedo();
+    }
+
+    public void circleClick(){
+        circleClickedProperty().setValue(true);
+        rectangleClickedProperty().setValue(false);
+    }
+
+    public void rectangleClick(){
+        rectangleClickedProperty().setValue(true);
+        circleClickedProperty().setValue(false);
+    }
+
 }
