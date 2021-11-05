@@ -1,10 +1,8 @@
 package shapes;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Circle extends Shape{
-    private double radius;
     public Circle(Color color, double x, double y, double value) {
         super(color, x, y, value);
     }

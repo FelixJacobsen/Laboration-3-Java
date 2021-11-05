@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 import java.util.ArrayDeque;
 import java.util.Deque;
+
 public class Model {
 
     private final BooleanProperty circleClicked;
@@ -100,11 +101,11 @@ public class Model {
 
     public ObservableList<Shape> getTemp() {
         ObservableList<Shape> tempList = FXCollections.observableArrayList();
-        for(Shape shape : shapes){
-            if(shape.getClass() == Rectangle.class){
+        for (Shape shape : shapes) {
+            if (shape.getClass() == Rectangle.class) {
                 tempList.add(new Rectangle(shape));
             }
-            if(shape.getClass() == Circle.class){
+            if (shape.getClass() == Circle.class) {
                 tempList.add(new Circle(shape));
             }
         }
@@ -115,7 +116,7 @@ public class Model {
         ObservableList<Shape> temp = getTemp();
         undo.addLast(temp);
 
-        for(var shape : selectedShapes)
+        for (var shape : selectedShapes)
             shape.setColor(getColor());
     }
 
@@ -123,7 +124,7 @@ public class Model {
         ObservableList<Shape> temp = getTemp();
         undo.addLast(temp);
 
-        for(var shape : selectedShapes)
+        for (var shape : selectedShapes)
             shape.setSize(getShapeSizeAsDouble());
     }
 
@@ -132,8 +133,8 @@ public class Model {
         shapes.addAll(undo.removeLast());
     }
 
-   public void updateAfterRedo(){
+    public void updateAfterRedo() {
         shapes.clear();
         shapes.addAll(redo.removeLast());
-   }
+    }
 }

@@ -14,9 +14,6 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="se.iths.java2.felix.laboration3.HelloController"
             prefWidth="1920" prefHeight="1920">
            <top>
-               <HBox>
-
-               </HBox>
                 <VBox>
                     <MenuBar>
                         <Menu text="File">

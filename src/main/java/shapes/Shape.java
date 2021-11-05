@@ -14,7 +14,7 @@ public abstract class Shape {
     private final DoubleProperty y = new SimpleDoubleProperty();
     private final DoubleProperty size = new SimpleDoubleProperty();
 
-    protected Shape(Color color, double x, double y, double size) {
+    public Shape(Color color, double x, double y, double size) {
         setColor(color);
         setBorderColor(Color.WHITE);
         setX(x);
@@ -22,15 +22,13 @@ public abstract class Shape {
         setSize(size);
     }
 
-    protected Shape(Shape shape) {
+    public Shape(Shape shape) {
         setColor(shape.getColor());
         setBorderColor(Color.WHITE);
         setX(shape.getX());
         setY(shape.getY());
         setSize(shape.getSize());
     }
-
-
 
     public Color getColor() {
         return color.get();

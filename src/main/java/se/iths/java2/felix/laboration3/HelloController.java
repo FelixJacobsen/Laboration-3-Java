@@ -1,5 +1,4 @@
 package se.iths.java2.felix.laboration3;
-
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -10,11 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import shapes.Circle;
 import shapes.FactoryShapes;
-import shapes.Rectangle;
 import shapes.Shape;
-
 import javax.imageio.ImageIO;
 import java.io.File;
 
@@ -33,6 +29,10 @@ public class HelloController {
     @FXML
     private TextField shapeSize;
 
+    public HelloController(Model model){
+        this.model = model;
+    }
+
 
     public void initialize() {
         this.model = new Model();
@@ -49,6 +49,8 @@ public class HelloController {
 
 
     }
+
+
 
 
 
