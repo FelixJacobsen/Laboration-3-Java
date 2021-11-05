@@ -1,4 +1,4 @@
-package com.example.laboration3;
+package se.iths.java2.felix.laboration3;
 
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import shapes.Circle;
+import shapes.FactoryShapes;
 import shapes.Rectangle;
 import shapes.Shape;
 
@@ -74,20 +75,18 @@ public class HelloController {
             ObservableList<Shape> temp = model.getTemp();
 
             if (model.isCircleClicked()){
-                model.shapes.add(new Circle(model.getColor(), x, y, model.getShapeSizeAsDouble()));
+                Shape shape = FactoryShapes.circleOf(model.getColor(),x, y, model.getShapeSizeAsDouble());
                 model.undo.addLast(temp);
+                model.shapes.add(shape);
             }
 
             if (model.isRectangleClicked()){
-                model.shapes.add(new Rectangle(model.getColor(), x, y, model.getShapeSizeAsDouble()));
+                Shape shape = FactoryShapes.rectangleOf(model.getColor(), x , y, model.getShapeSizeAsDouble());
                 model.undo.addLast(temp);
+                model.shapes.add(shape);
             }
         }
-
-        drawShape();
-
     }
-
 
     public void drawShape() {
         var gc = canvas.getGraphicsContext2D();
@@ -96,7 +95,6 @@ public class HelloController {
             shape.draw(gc);
         }
     }
-
 
     public void onSave() {
         SVGWriter.saveToFile(model);
@@ -108,9 +106,6 @@ public class HelloController {
             System.out.println("Failed to save image: " + e);
         }
     }
-
-
-
 
     public void onExit() {
         Platform.exit();
@@ -141,11 +136,10 @@ public class HelloController {
 
 
     public void undoAction() {
-
-
         ObservableList<Shape> temp = model.getTemp();
         if(model.undo.isEmpty())
             return;
+
         model.redo.addLast(temp);
         model.updateShapes();
     }
@@ -154,6 +148,7 @@ public class HelloController {
         ObservableList<Shape> temp = model.getTemp();
         if(model.redo.isEmpty())
             return;
+
         model.undo.addLast(temp);
         model.updateAfterRedo();
     }

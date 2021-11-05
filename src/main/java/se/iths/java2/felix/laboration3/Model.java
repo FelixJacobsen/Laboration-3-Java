@@ -1,4 +1,5 @@
-package com.example.laboration3;
+package se.iths.java2.felix.laboration3;
+import javafx.beans.Observable;
 import shapes.Circle;
 import shapes.Rectangle;
 import shapes.Shape;
@@ -23,7 +24,16 @@ public class Model {
 
 
     public Model() {
-        this.shapes = FXCollections.observableArrayList();
+        this.shapes = FXCollections.observableArrayList(
+                shape -> new Observable[]{
+                        shape.colorProperty(),
+                        shape.borderColorProperty(),
+                        shape.xProperty(),
+                        shape.yProperty(),
+                        shape.sizeProperty(),
+                }
+        );
+
         this.selectedShapes = FXCollections.observableArrayList();
         this.circleClicked = new SimpleBooleanProperty();
         this.rectangleClicked = new SimpleBooleanProperty();

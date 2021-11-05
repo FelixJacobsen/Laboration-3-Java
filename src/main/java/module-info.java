@@ -5,6 +5,6 @@ module com.example.laboration3 {
 
     requires org.kordamp.bootstrapfx.core;
 
-    opens com.example.laboration3 to javafx.fxml;
-    exports com.example.laboration3;
+    opens se.iths.java2.felix.laboration3 to javafx.fxml;
+    exports se.iths.java2.felix.laboration3;
 }

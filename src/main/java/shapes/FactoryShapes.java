@@ -7,7 +7,7 @@ public class FactoryShapes {
         return new Circle(color,x,y,size);
     }
 
-   public static Rectangle RectangleOf(Color color, double x, double y, double size){
+   public static Rectangle rectangleOf(Color color, double x, double y, double size){
         return new Rectangle(color,x,y,size);
    }
 

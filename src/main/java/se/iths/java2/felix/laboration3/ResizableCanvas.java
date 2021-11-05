@@ -1,4 +1,4 @@
-package com.example.laboration3;
+package se.iths.java2.felix.laboration3;
 import javafx.scene.canvas.Canvas;
 public class ResizableCanvas extends Canvas {
 

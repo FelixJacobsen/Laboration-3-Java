@@ -9,16 +9,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ColorPicker?>
-<?import com.example.laboration3.ResizableCanvas?>
+<?import se.iths.java2.felix.laboration3.ResizableCanvas?>
 <?import javafx.scene.control.CheckBox?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.laboration3.HelloController"
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="se.iths.java2.felix.laboration3.HelloController"
             prefWidth="1920" prefHeight="1920">
            <top>
                <HBox>
 
-                   <Button text="Delete" onAction="#deleteShape"/>
-                   <Button text="Modify color" onAction="#modifyColor"/>
-                   <Button text="Modify font" onAction="#modifyFont"/>
                </HBox>
                 <VBox>
                     <MenuBar>
@@ -30,8 +27,6 @@
                             <MenuItem text="Delete" onAction="#deleteShape"/>
                             <MenuItem text="Modify color" onAction="#modifyColor"/>
                             <MenuItem text="Modify font" onAction="#modifyFont"/>
-                            <MenuItem text="Undo" onAction="#undoAction"/>
-                            <MenuItem text="Redo" onAction="#redoAction"/>
                         </Menu>
                     </MenuBar>
                     <ToolBar>
@@ -41,6 +36,8 @@
                             <Button text="Circle" onAction="#circleClick"/>
                             <Button text="Rectangle" onAction="#rectangleClick"/>
                             <ColorPicker fx:id="colorPicker"/>
+                            <Button text="Undo " onAction="#undoAction"/>
+                            <Button text="Redo" onAction="#redoAction"/>
                         </HBox>
                     </ToolBar>
                 </VBox>
