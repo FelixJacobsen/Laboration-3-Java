@@ -28,22 +28,22 @@ class HelloControllerTest {
     }
 
     @Test
-    void deletingAShape(){
-        model.shapes.add(shape);
-        model.shapes.add(shape2);
+    void deletingTwoShapesShouldReturnSizeOfZero(){
+        model.addShape(shape);
+        model.addShape(shape2);
         model.deleteShape(shape2);
         model.deleteShape(shape);
-        var result = model.shapes.size();
-        assertEquals(result,model.shapes.size(), "The list should be empty");
+        var result = model.getShapes().size();
+        assertEquals(0,result, "The list should be empty");
     }
 
     @Test
-    void addingMultipleShapes(){
+    void addingThreeShapesShouldReturnSizeOfThree(){
         model.addShape(shape);
         model.addShape(shape);
         model.addShape(shape2);
-        var result = model.shapes.size();
-        assertEquals(result,model.shapes.size(),"The list should contain three ");
+        var result = model.getShapes().size();
+        assertEquals(3,result ,"The list should contain three shapes ");
     }
 
 

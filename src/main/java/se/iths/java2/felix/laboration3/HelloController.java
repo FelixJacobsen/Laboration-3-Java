@@ -1,16 +1,14 @@
 package se.iths.java2.felix.laboration3;
 
-import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import shapes.FactoryShapes;
 import shapes.Shape;
 
 import javax.imageio.ImageIO;
@@ -35,61 +33,35 @@ public class HelloController {
         this.model = model;
     }
 
-    public HelloController(){
+    public HelloController() {
 
     }
-
 
     public void initialize() {
         this.model = new Model();
         colorPicker.valueProperty().bindBidirectional(model.colorProperty());
         shapeSize.textProperty().bindBidirectional(model.shapeSizeProperty());
-
         canvas.widthProperty().addListener(o -> drawShape());
         canvas.heightProperty().addListener(o -> drawShape());
-
         modifyBox.selectedProperty().bindBidirectional(model.modifyModeProperty());
-        model.shapes.addListener((ListChangeListener<Shape>) change -> drawShape());
-
+        model.getShapes().addListener((ListChangeListener<Shape>) change -> drawShape());
     }
-
 
     public void clickedOnCanvas(MouseEvent mouseEvent) {
         double x = mouseEvent.getX();
         double y = mouseEvent.getY();
+
         if (model.isModifyMode()) {
-            for (var shape : model.shapes) {
-                if (shape.isInside(x, y)) {
-                    if (model.selectedShapes.contains(shape)) {
-                        shape.setBorderColor(Color.TRANSPARENT);
-                        model.selectedShapes.remove(shape);
-                    } else {
-                        shape.setBorderColor(Color.RED);
-                        model.selectedShapes.add(shape);
-                    }
-                }
-            }
+            model.checkIfInside(x, y);
         } else {
-            ObservableList<Shape> temp = model.getTemp();
-
-            if (model.isCircleClicked()) {
-                Shape shape = FactoryShapes.circleOf(model.getColor(), x, y, model.getShapeSizeAsDouble());
-                model.undo.addLast(temp);
-                model.shapes.add(shape);
-            }
-
-            if (model.isRectangleClicked()) {
-                Shape shape = FactoryShapes.rectangleOf(model.getColor(), x, y, model.getShapeSizeAsDouble());
-                model.undo.addLast(temp);
-                model.shapes.add(shape);
-            }
+            model.checkShapeAndAddToShapes(x, y);
         }
     }
 
     public void drawShape() {
         var gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getHeight(), canvas.getWidth());
-        for (var shape : model.shapes) {
+        for (var shape : model.getShapes()) {
             shape.draw(gc);
         }
     }
@@ -106,16 +78,15 @@ public class HelloController {
     }
 
     public void onExit() {
-        Platform.exit();
+        System.exit(0);
     }
 
-
     public void circleClick() {
-       model.circleClick();
+        model.circleClick();
     }
 
     public void rectangleClick() {
-       model.rectangleClick();
+        model.rectangleClick();
     }
 
     public void deleteShape() {
@@ -137,8 +108,6 @@ public class HelloController {
     public void redoAction() {
         model.redoFromModel();
     }
-
-
 }
 
 

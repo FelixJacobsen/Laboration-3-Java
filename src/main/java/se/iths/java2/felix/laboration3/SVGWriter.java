@@ -15,9 +15,11 @@ public class SVGWriter {
 
     public static void saveToFile(Model model) {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG format", "*.svg"));
-        Path path = Path.of(fileChooser.showSaveDialog(new Stage()).getPath());
-        List<String> stringList = new ArrayList<>();
+        Path path = getPath();
+        if(path == null)
+            return;
 
+        List<String> stringList = new ArrayList<>();
         convertToStrings(model, stringList);
 
         try {
@@ -28,11 +30,21 @@ public class SVGWriter {
 
     }
 
+    private static Path getPath() {
+        Path path;
+        try{
+            path = Path.of(fileChooser.showSaveDialog(new Stage()).getPath());
+        }catch (NullPointerException e){
+            return null;
+        }
+        return path;
+    }
+
     private static void convertToStrings(Model model, List<String> stringList) {
         stringList.add("<svg xlmns=\"http://www.w3.org/2000/svg\" version=\"1.1\" " +
                 "width=\"800.0\" height=\"800.0\"> ");
 
-        model.shapes.forEach(shape -> shapeSVGtoString(shape, stringList));
+        model.getShapes().forEach(shape -> shapeSVGtoString(shape, stringList));
         stringList.add("</svg>");
     }
 
